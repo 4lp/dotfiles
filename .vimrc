@@ -15,16 +15,42 @@ nnoremap <C-P> :bprev<CR>
 nnoremap  ` :NERDTree<CR>
 nnoremap pp "0p
 
+" CtrlP
+let g:ctrlp_map = '<c-s>'
+" persistent cache
+let g:ctrlp_cache_dir = $HOME . '/.cache/ctrlp'
+" User ag insead of vim search
+if executable('ag')
+	let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+endif
+" Ignore some folders and files for CtrlP indexing
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\.git$\|\.yardoc\|public$|log\|tmp$',
+  \ 'file': '\.so$\|\.dat$|\.DS_Store$'
+  \ }
+" Digital Cheetah custom
 let g:digital_cheetah_sites='/home/mike/sites/'
+" YCM conf
+let g:ycm_global_ycm_extra_conf = '/usr/share/vim/vimfiles/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
 
 colorscheme molokai
 set background=dark
 set t_Co=256
 syntax on
 
+"keep window transparency
+hi Normal guibg=NONE ctermbg=NONE
+
 "store swapfiles in their own directory
 set backupdir=~/.vimbackup//
 set directory=~/.vimbackup//
+
+"persistent undo
+if has('persistent_undo') && !isdirectory(expand('~').'/.vim/backups')
+	silent !mkdir ~/.vim/backups > /dev/null 2>&1
+	set undodir=~/.vim/backups
+	set undofile
+endif
 
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
@@ -33,6 +59,11 @@ Plugin 'VundleVim/Vundle.vim'
 Bundle 'git@bitbucket.org:digitalcheetah/digital-cheetah-vim.git'
 Bundle 'scrooloose/nerdtree'
 Bundle 'ap/vim-buftabline'
+Bundle 'vim-scripts/taglist.vim'
+Bundle 'Valloric/YouCompleteMe'
+Bundle 'tpope/vim-surround'
+Bundle 'kien/ctrlp.vim'
+Bundle 'ternjs/tern_for_vim'
 
 call vundle#end()            
 
