@@ -15,24 +15,32 @@ nnoremap <C-P> :bprev<CR>
 nnoremap  ` :NERDTree<CR>
 nnoremap pp "0p
 
-" CtrlP
+" CtrlP - map not working but that's okay!
 let g:ctrlp_map = '<c-s>'
 " persistent cache
 let g:ctrlp_cache_dir = $HOME . '/.cache/ctrlp'
 " User ag insead of vim search
-if executable('ag')
-	let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+if executable('rg')
+	set grepprg=rg\ --color=never
+	let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
 endif
 " Ignore some folders and files for CtrlP indexing
 let g:ctrlp_custom_ignore = {
   \ 'dir':  '\.git$\|\.yardoc\|public$|log\|tmp$',
   \ 'file': '\.so$\|\.dat$|\.DS_Store$'
   \ }
+" only index down, not up
+let g:ctrlp_working_path_mode = '0'
 " Digital Cheetah custom
 let g:digital_cheetah_sites='/home/mike/sites/'
 " YCM conf
 let g:ycm_global_ycm_extra_conf = '/usr/share/vim/vimfiles/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
+" syntastic
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
 
+set wildignore+=*/.git/*,*/tmp/*,*.swp
 colorscheme molokai
 set background=dark
 set t_Co=256
@@ -51,6 +59,15 @@ if has('persistent_undo') && !isdirectory(expand('~').'/.vim/backups')
 	set undodir=~/.vim/backups
 	set undofile
 endif
+	
+"make tab 4 spaces
+filetype plugin indent on
+"show existing tab with 4 spaces width
+set tabstop=4
+"indent is 4 spaces
+set shiftwidth=4
+"tab = 4 spaces
+set expandtab
 
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
@@ -64,6 +81,7 @@ Bundle 'Valloric/YouCompleteMe'
 Bundle 'tpope/vim-surround'
 Bundle 'kien/ctrlp.vim'
 Bundle 'ternjs/tern_for_vim'
+Bundle 'vim-syntastic/syntastic'
 
 call vundle#end()            
 
