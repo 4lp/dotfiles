@@ -20,17 +20,10 @@ if executable('rg')
 	set grepprg=rg\ --color=never
 	let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
 endif
-" Digital Cheetah custom
-let g:digital_cheetah_sites='/home/mike/sites/'
-" YCM conf
-let g:ycm_global_ycm_extra_conf = '/usr/share/vim/vimfiles/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
 " syntastic
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
-
-let g:syntastic_perl_checkers = ['perl']
-let g:syntastic_enable_perl_checker = 1
 
 set wildignore+=*/.git/*,*/tmp/*,*.swp
 colorscheme molokai
@@ -69,7 +62,6 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'
-Bundle 'git@bitbucket.org:digitalcheetah/digital-cheetah-vim.git'
 Bundle 'scrooloose/nerdtree'
 Bundle 'ap/vim-buftabline'
 Bundle 'vim-scripts/taglist.vim'
@@ -88,18 +80,6 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 autocmd bufenter * if &filetype == "" | setlocal ft=text | endif 
 
 au BufRead,BufNewFile * setfiletype txt
-au BufRead,BufNewFile *.htm call s:MP_FILE()
-fun! s:MP_FILE()
-	let n = 1
-	while n < 10 && n < line("$")
-		  if getline(n) =~ '[<][!]--MPBLOCK:'
-			  set ft=mp_html
-			  return
-		  endif
-		  let n = n + 1
-	endwhile
-endfun
-au! Syntax mp_html source $HOME/.vim/syntax/mp_html.vim
 
 " set up aliasing
 fun! SetupCommandAlias(from, to)

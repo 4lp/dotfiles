@@ -1,0 +1,10 @@
+#!/bin/bash
+SESSION=`basename $PWD`
+
+tmux -2 new-session -d -s $SESSION
+
+tmux rename-window -t $SESSION:1 vim 'fish'
+tmux new-window -t $SESSION -a -n general-purpose 'fish'
+
+tmux select-window -t $SESSION:1
+tmux -2 attach -t $SESSION
