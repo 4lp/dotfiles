@@ -9,6 +9,8 @@ set linebreak		" ...unless it's convenient
 "set hlsearch		" highlight search results
 set ignorecase		" turn off case for searching...
 set smartcase 		" ...unless we type a capital
+"
+
 
 nnoremap <C-N> :bnext<CR>
 nnoremap <C-P> :bprev<CR>
@@ -16,43 +18,43 @@ nnoremap  ` :NERDTree<CR>
 nnoremap pp "0p
 
 " User rg insead of vim search
-if executable('rg')
-	set grepprg=rg\ --color=never
-	let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
+if executable('ag')
+	set grepprg=ag\ --color=never
+	let g:ctrlp_user_command = 'ag %s --files --color=never --glob ""'
 endif
+
 " syntastic
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
+"colors
 set wildignore+=*/.git/*,*/tmp/*,*.swp
-colorscheme molokai
-set background=dark
 set t_Co=256
 syntax on
+colorscheme fairyfloss2
 
-"keep window transparency
-hi Normal guibg=NONE ctermbg=NONE
-
+"store backups in their own directory
+set backup
+set backupdir=~/.vim/backups//
 "store swapfiles in their own directory
-set backupdir=~/.vimbackup//
-set directory=~/.vimbackup//
+set directory=~/.vim/swap//
 
 "persistent undo
-if has('persistent_undo') && !isdirectory(expand('~').'/.vim/backups')
-	silent !mkdir ~/.vim/backups > /dev/null 2>&1
-	set undodir=~/.vim/backups
+if has('persistent_undo') && !isdirectory(expand('~').'/.vim/undo')
+	silent !mkdir ~/.vim/undo > /dev/null 2>&1
+	set undodir=~/.vim/undo//
 	set undofile
 endif
 	
-"make tab 4 spaces
+"make tab 2 spaces
 filetype plugin indent on
-"show existing tab with 4 spaces width
-set tabstop=4
-"indent is 4 spaces
-set shiftwidth=4
-"tab = 4 spaces
-set noexpandtab
+"show existing tab with 2 spaces width
+set tabstop=2
+"indent is 2 spaces
+set shiftwidth=2
+"tab = 2 spaces
+set expandtab
 
 " matchit
 filetype plugin on
@@ -71,6 +73,11 @@ Bundle 'ternjs/tern_for_vim'
 Bundle 'vim-syntastic/syntastic'
 Bundle 'tpope/vim-ragtag'
 Bundle 'tpope/vim-commentary'
+Bundle 'tpope/vim-fugitive'
+Bundle 'posva/vim-vue'
+Bundle 'prettier/vim-prettier'
+Bundle 'takac/vim-hardtime'
+Bundle 'vim-scripts/RltvNmbr.vim'
 
 call vundle#end()			
 
@@ -79,7 +86,18 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 "set filetype=txt if new file
 autocmd bufenter * if &filetype == "" | setlocal ft=text | endif 
 
-au BufRead,BufNewFile * setfiletype txt
+
+"for basic text file syntax
+"au BufRead,BufNewFile * setfiletype txt
+"vue syntax
+au BufRead,BufNewFile *.vue setfiletype vue
+
+"skeleton files
+if has("autocmd")
+  augroup templates
+    autocmd BufNewFile *.vue 0r ~/.vim/templates/skeleton.vue
+  augroup END
+endif
 
 " set up aliasing
 fun! SetupCommandAlias(from, to)
@@ -89,3 +107,10 @@ fun! SetupCommandAlias(from, to)
 endfun
 " aliases
 call SetupCommandAlias("fp","echo expand('%:p')")
+
+" enable relative numbers too
+autocmd VimEnter * RltvNmbr
+
+" enable HARDTIME by default
+" let g:hardtime_default_on = 1
+" let g:hardtime_showmsg = 1
